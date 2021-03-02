@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .container{
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4 offset-4">
+                <label for="date">Select Date</label> 
+                <input type="date" id="userDate" onchange="diffDate()">
+            </div>
+        </div>
+    </div>
+
+    <div id="table"></div>
+
+    <script>
+        //document.getElementById('userDate').addEventListener('onchange',diffDate());
+
+        function diffDate(){
+            document.getElementById('table').innerHTML = "";
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + '-' + dd + '-' + yyyy;;
+            var currDate = new Date(today);
+
+            var userDate = document.getElementById('userDate').value;
+            userDate = new Date(userDate);
+            var timeDiff = Math.abs(currDate.getTime()-userDate.getTime());
+            var day = 1000*60*60*24;
+            var dayCount = Math.floor(timeDiff/day);
+            var monthDiff = Math.floor(dayCount/30);
+            var yearDiff = Math.floor(dayCount/365);
+            var minDiff = Math.floor((timeDiff/1000)/60);
+            var secDiff = Math.floor(timeDiff/1000);
+
+            var table = document.createElement('table');
+            table.setAttribute('class','table');
+            var tBody = document.createElement('tbody');
+
+            var dayRow = createRow('Day Count',dayCount);
+            var yearRow = createRow('Year Difference',yearDiff);
+            var monthRow = createRow('Month Difference',monthDiff);
+            var minRow = createRow('Minutes Difference',minDiff);
+            var secRow = createRow('Seconds Difference', secDiff);
+            var milRow = createRow('Milisecond Difference',timeDiff);
+
+            tBody.append(dayRow,monthRow,yearRow,minRow,secRow,milRow);
+            table.append(tBody);
+            document.getElementById('table').append(table);
+
+        }
+
+
+        function createRow(thData,value){
+            var row = document.createElement('tr');
+            var th = document.createElement('th');
+            th.setAttribute('scope','col');
+            th.innerHTML = thData;
+            var tr = document.createElement('td');
+            tr.innerHTML = value;
+
+            row.append(th,tr);
+
+            return row;
+        }
+
+    </script>
+</body>
+</html>
